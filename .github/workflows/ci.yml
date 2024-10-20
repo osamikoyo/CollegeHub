@@ -1,0 +1,32 @@
+name: CI Pipeline
+
+# Когда запускать процесс CI
+on:
+  push:
+    branches:
+      - master  # Запускать на каждый пуш в ветку master
+  pull_request:
+    branches:
+      - master  # Также запускать на каждый pull request в ветку master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Используем последнюю версию Ubuntu для CI
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2  # Клонируем репозиторий с кодом
+
+    - name: Set up Go
+      uses: actions/setup-go@v2  # Настраиваем Go-среду
+      with:
+        go-version: '1.18'  # Укажи нужную версию Go
+
+    - name: Install dependencies
+      run: go mod tidy  # Устанавливаем зависимости проекта
+
+    - name: Build the project
+      run: go build -v ./...  # Собираем проект
+
+    - name: Run tests
+      run: go test -v ./...  # Запускаем тесты
